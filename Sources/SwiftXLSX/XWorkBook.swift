@@ -113,7 +113,7 @@ final public class XWorkBook{
     private func findNumberFormats(_ cell:XCell){
         let numberFormat = cell.numFormat
         
-        var idval:UInt64 = numberFormat.ind()
+        let idval:UInt64 = numberFormat.ind()
         
         if idval == UInt64.max {
             
@@ -136,7 +136,7 @@ final public class XWorkBook{
                     format = ""
                 }
                 
-                var id = (self.NumberFormats.count + 50)
+                let id = (self.NumberFormats.count + 50)
                 
                 let xml = "<numFmt numFmtId=\"\(id)\" formatCode=\"\(format)\"/>"
                 
@@ -188,7 +188,7 @@ final public class XWorkBook{
             if let (_,ind) = self.xfs[idval] {
                 cell.idStyle = ind
             }else{
-                let xf = "<xf fontId=\"\(cell.idFont)\" numFmtId=\"\(cell.idNumFormat)\" fillId=\"\(cell.idFill)\" borderId=\"\(cell.Border ? "1" : "0")\" applyFont=\"1\" applyNumberFormat=\"\(cell.idNumFormat)\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\"><alignment horizontal=\"\(cell.alignmentHorizontal.str())\" vertical=\"\(cell.alignmentVertical.str())\" textRotation=\"0\" wrapText=\"true\" shrinkToFit=\"false\"/></xf>"
+                let xf = "<xf fontId=\"\(cell.idFont)\" numFmtId=\"\(cell.idNumFormat)\" fillId=\"\(cell.idFill)\" borderId=\"\(cell.Border ? "1" : "0")\" applyFont=\"1\" applyNumberFormat=\"1\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\"><alignment horizontal=\"\(cell.alignmentHorizontal.str())\" vertical=\"\(cell.alignmentVertical.str())\" textRotation=\"0\" wrapText=\"true\" shrinkToFit=\"false\"/></xf>"
                 cell.idStyle = self.xfs.count
                 self.xfs[idval] = (xf,self.xfs.count)
             }
