@@ -37,6 +37,7 @@ final public class XWorkBook{
     private var xfs:[UInt64:(String,Int)] = [:]
     private var Borders:[String] = []
     private var Drawings:[String] = []
+    private var NumberFormats:[UInt64:(String,Int)] = [:]
     
     private var vals:[String] = []
     private var valss:Set<String> = Set([])
@@ -75,6 +76,7 @@ final public class XWorkBook{
         self.valss.insert("")
         self.CHARSIZE.removeAll()
         self.Bgcolor.removeAll()
+        self.NumberFormats.removeAll()
     }
     
     private func findFont(_ cell:XCell){
@@ -105,6 +107,44 @@ final public class XWorkBook{
             
             cell.idFont = self.Fonts.count
             self.Fonts[idval] = (xml,self.Fonts.count)
+        }
+    }
+    
+    private func findNumberFormats(_ cell:XCell){
+        let numberFormat = cell.numFormat
+        
+        var idval:UInt64 = numberFormat.ind()
+        
+        if idval == UInt64.max {
+            
+            if let (_,ind) = self.NumberFormats[idval] {
+                cell.idNumFormat = ind
+            }else{
+                var format = ""
+                
+                switch numberFormat {
+                case .custom(let f):
+                    format = f
+                    break
+                case .date(let f):
+                    format = f
+                    break
+                case .time(let f):
+                    format = f
+                    break
+                default:
+                    format = ""
+                }
+                
+                var id = (self.NumberFormats.count + 50)
+                
+                let xml = "<numFmt numFmtId=\"\(id)\" formatCode=\"\(format)\"/>"
+                
+                cell.idNumFormat = id
+                self.NumberFormats[idval] = (xml,id)
+            }
+        } else {
+            cell.idNumFormat = Int(idval)
         }
     }
     
@@ -148,7 +188,7 @@ final public class XWorkBook{
             if let (_,ind) = self.xfs[idval] {
                 cell.idStyle = ind
             }else{
-                let xf = "<xf fontId=\"\(cell.idFont)\" numFmtId=\"0\" fillId=\"\(cell.idFill)\" borderId=\"\(cell.Border ? "1" : "0")\" applyFont=\"1\" applyNumberFormat=\"0\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\"><alignment horizontal=\"\(cell.alignmentHorizontal.str())\" vertical=\"\(cell.alignmentVertical.str())\" textRotation=\"0\" wrapText=\"true\" shrinkToFit=\"false\"/></xf>"
+                let xf = "<xf fontId=\"\(cell.idFont)\" numFmtId=\"\(cell.idNumFormat)\" fillId=\"\(cell.idFill)\" borderId=\"\(cell.Border ? "1" : "0")\" applyFont=\"1\" applyNumberFormat=\"\(cell.idNumFormat)\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\"><alignment horizontal=\"\(cell.alignmentHorizontal.str())\" vertical=\"\(cell.alignmentVertical.str())\" textRotation=\"0\" wrapText=\"true\" shrinkToFit=\"false\"/></xf>"
                 cell.idStyle = self.xfs.count
                 self.xfs[idval] = (xf,self.xfs.count)
             }
@@ -284,7 +324,7 @@ final public class XWorkBook{
             for cell in sheet {
                 self.findFont(cell)
                 self.findFills(cell)
-                
+                self.findNumberFormats(cell)
                 self.findxf(cell , sheet)
                 self.findVals(cell)
             }
@@ -378,7 +418,7 @@ final public class XWorkBook{
                                 hasimages = true
                                 colls.append("<c r=\"\(XSheet.EncodeNumberABC(col-1))\(row)\" s=\"\(cell.idStyle >= 0 ? cell.idStyle : 0)\" />")
                             case .formula(let formula, let preVal):
-                                colls.append("<c r=\"\(XSheet.EncodeNumberABC(col-1))\(row)\" s=\"\(cell.idStyle)\" ><f>\(formula)</f><v>\(String(format: "%.3f", preVal))</v></c>")
+                                colls.append("<c r=\"\(XSheet.EncodeNumberABC(col-1))\(row)\" s=\"\(cell.idStyle)\" ><f>\(formula)</f><v>\(preVal)</v></c>")
                             }
                         }else{
                             colls.append("<c r=\"\(XSheet.EncodeNumberABC(col-1))\(row)\" s=\"\(cell.idStyle >= 0 ? cell.idStyle : 0)\" />")
@@ -490,6 +530,17 @@ final public class XWorkBook{
         Xml.append("<styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">")
 //        Xml.append("<numFmts count=\"0\"/>")
         
+        
+        if !NumberFormats.isEmpty {
+            Xml.append("<numFmts count=\"\(NumberFormats.count)\">")
+            let ar = NumberFormats.values.sorted(by: {  $0.1 < $1.1})
+            
+            for (nf,_) in ar {
+                Xml.append(nf)
+            }
+            
+            Xml.append("</numFmts>")
+        }
         
         if Fonts.isEmpty {
             Xml.append("<fonts count=\"0\"/>")

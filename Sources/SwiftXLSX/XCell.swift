@@ -102,7 +102,7 @@ public enum XValue : Equatable {
     case double(Double)
     case float(Float)
     case icon(XImageCell)
-    case formula(String, Double)
+    case formula(String, String)
 }
 
 
@@ -164,6 +164,7 @@ final public class XCell{
     public var alignmentHorizontal:XAligmentHorizontal = .left
     public var color : ColorClass = .black
     public var colorbackground : ColorClass = .white
+    public var numFormat: XNumberFormat = .general
 
     public var width:Int = 50
     
@@ -172,6 +173,7 @@ final public class XCell{
     var idFont:Int  = 0
     var idFill:Int  = 0
     var idStyle:Int = 0
+    var idNumFormat:Int = 0
     var idVal:Int?
     var nocalculatewidth: Bool = true
 
