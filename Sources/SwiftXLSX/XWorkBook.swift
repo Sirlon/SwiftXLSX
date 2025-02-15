@@ -132,8 +132,76 @@ final public class XWorkBook{
                 case .time(let f):
                     format = f
                     break
+                case .currency(let decimalPlaces, let sign, let red):
+                    if decimalPlaces < 2 {
+                        format = "#,##0\ "
+                    } else {
+                        format = "#,##0.00"
+                    }
+
+                    if sign == "$" {
+                        format = "[$$]\(format)"
+                    } else if sign == "€" {
+                        format += "[$€-1]" 
+                    } else {
+                        format += "[$ \(sign)]"
+                    }
+
+                    if red {
+                        format += "[Red]"
+                    }
+                    break
+                case .percentage(let decimalPlaces):
+                    format = "0"
+                    if decimalPlaces > 0 {
+                        format += "."
+                    }
+                    var i = 0
+                    while i < decimalPlaces {
+                        format += "0"
+                        i += 1
+                    }
+                    format += "%"
+                    break
+                case .number(let decimalPlaces):
+                    format = "0"
+                    if decimalPlaces > 0 {
+                        format += "."
+                    }
+                    var i = 0
+                    while i < decimalPlaces {
+                        format += "0"
+                        i += 1
+                    }
+                    break
+                case .accounting(let dec, let sign):
+                    if sign == "$" {
+                        format = "_-* #,##0.00\ [$$]_-;\-* #,##0.00\ [$$]_-;_-* "-"??\ [$$]_-;_-@"
+                    } else if sign == "€" {
+                        format += "_-* #,##0.00\ [$€-1]_-;\-* #,##0.00\ [$€-1]_-;_-* "-"??\ [$€-1]_-;_-@" 
+                    } else {
+                        format += "[_-* #,##0.00\ [$ \(sign)]_-;\-* #,##0.00\ [$ \(sign)]_-;_-* "-"??\ [$ \(sign)]_-;_-@"
+                    }
+                    break
+                case .scientific(let decimalPlaces):
+                    format = "0"
+                    if decimalPlaces > 0 {
+                        format += "."
+                    }
+                    var i = 0
+                    while i < decimalPlaces {
+                        format += "0"
+                        i += 1
+                    }
+                    format += "E+"
+                    i = 0
+                    while i < decimalPlaces {
+                        format += "0"
+                        i += 1
+                    }
+                    break
                 default:
-                    format = ""
+                    format = "0"
                 }
                 
                 let id = (self.NumberFormats.count + 50)

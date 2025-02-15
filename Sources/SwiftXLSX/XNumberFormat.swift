@@ -11,8 +11,8 @@ import Foundation
 public enum XNumberFormat {
     case general
     case number(decimalPlaces: Int = 0)
-    case currency(decimalPlaces: Int = 1, red: Bool)
-    case accounting(decimalPlaces: Int = 0)
+    case currency(decimalPlaces: Int = 1, sign: String = "$", red: Bool = false)
+    case accounting(decimalPlaces: Int = 0, sign: String = "$")
     case date(format: String)
     case time(format: String)
     case percentage(decimalPlaces: Int = 0)
@@ -33,7 +33,7 @@ public enum XNumberFormat {
             } else {
                 return 0
             }
-        case .currency(let decimalPlaces, let red):
+        case .currency(let decimalPlaces, let sign, let red):
             if decimalPlaces == 2 {
                 if red {
                     return 40
@@ -47,7 +47,7 @@ public enum XNumberFormat {
             } else {
                 return 0
             }
-        case .accounting(let decimalPlaces):
+        case .accounting(let decimalPlaces, let sign):
             return 40
         case .date(let format):
             switch format {
