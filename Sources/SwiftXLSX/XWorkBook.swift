@@ -174,13 +174,13 @@ final public class XWorkBook{
                         i += 1
                     }
                     break
-                case .accounting(let dec, let sign):
+                case .accounting(_, let sign):
                     if sign == "$" {
-                        format = "_-* #,##0.00\\ [$$]_-;\\-* #,##0.00\\ [$$]_-;_-* "-"??\\ [$$]_-;_-@"
+                        format = "_-* #,##0.00\\ [$$]_-;\\-* #,##0.00\\ [$$]_-;_-* \"-\"??\\ [$$]_-;_-@"
                     } else if sign == "€" {
-                        format += "_-* #,##0.00\\ [$€-1]_-;\\-* #,##0.00\\ [$€-1]_-;_-* "-"??\\ [$€-1]_-;_-@" 
+                        format = "_-* #,##0.00\\ [$€-1]_-;\\-* #,##0.00\\ [$€-1]_-;_-* \"-\"??\\ [$€-1]_-;_-@"
                     } else {
-                        format += "[_-* #,##0.00\\ [$ \(sign)]_-;\\-* #,##0.00\\ [$ \(sign)]_-;_-* "-"??\\ [$ \(sign)]_-;_-@"
+                        format = "[_-* #,##0.00\\ [$ \(sign)]_-;\\-* #,##0.00\\ [$ \(sign)]_-;_-* \"-\"??\\ [$ \(sign)]_-;_-@"
                     }
                     break
                 case .scientific(let decimalPlaces):
@@ -1289,7 +1289,7 @@ final public class XWorkBook{
         
         cell = sheet.AddCell(XCoords(row: line, col: 5))
         cell.Border = true
-        cell.value = .double(50)
+        cell.value = .double(50.5)
         cell.alignmentHorizontal = .right
         
         cell = sheet.AddCell(XCoords(row: line, col: 6))
