@@ -134,7 +134,7 @@ final public class XWorkBook{
                     break
                 case .currency(let decimalPlaces, let sign, let red):
                     if decimalPlaces < 2 {
-                        format = "#,##0\ "
+                        format = "#,##0\\ "
                     } else {
                         format = "#,##0.00"
                     }
@@ -176,11 +176,11 @@ final public class XWorkBook{
                     break
                 case .accounting(let dec, let sign):
                     if sign == "$" {
-                        format = "_-* #,##0.00\ [$$]_-;\-* #,##0.00\ [$$]_-;_-* "-"??\ [$$]_-;_-@"
+                        format = "_-* #,##0.00\\ [$$]_-;\\-* #,##0.00\\ [$$]_-;_-* "-"??\\ [$$]_-;_-@"
                     } else if sign == "€" {
-                        format += "_-* #,##0.00\ [$€-1]_-;\-* #,##0.00\ [$€-1]_-;_-* "-"??\ [$€-1]_-;_-@" 
+                        format += "_-* #,##0.00\\ [$€-1]_-;\\-* #,##0.00\\ [$€-1]_-;_-* "-"??\\ [$€-1]_-;_-@" 
                     } else {
-                        format += "[_-* #,##0.00\ [$ \(sign)]_-;\-* #,##0.00\ [$ \(sign)]_-;_-* "-"??\ [$ \(sign)]_-;_-@"
+                        format += "[_-* #,##0.00\\ [$ \(sign)]_-;\\-* #,##0.00\\ [$ \(sign)]_-;_-* "-"??\\ [$ \(sign)]_-;_-@"
                     }
                     break
                 case .scientific(let decimalPlaces):
