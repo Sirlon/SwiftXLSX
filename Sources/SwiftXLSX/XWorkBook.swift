@@ -115,104 +115,99 @@ final public class XWorkBook{
         
         let idval:UInt64 = numberFormat.ind()
         
-        if idval == UInt64.max {
+        if let (_,ind) = self.NumberFormats[idval] {
+            cell.idNumFormat = ind
+        }else{
+            var format = ""
             
-            if let (_,ind) = self.NumberFormats[idval] {
-                cell.idNumFormat = ind
-            }else{
-                var format = ""
-                
-                switch numberFormat {
-                case .custom(let f):
-                    format = f
-                    break
-                case .date(let f):
-                    format = f
-                    break
-                case .time(let f):
-                    format = f
-                    break
-                case .currency(let decimalPlaces, let sign, let red):
-                    if decimalPlaces < 2 {
-                        format = "#,##0\\ "
-                    } else {
-                        format = "#,##0.00"
-                    }
-
-                    if sign == "$" {
-                        format = "[$$]\(format)"
-                    } else if sign == "€" {
-                        format += "[$€-1]" 
-                    } else {
-                        format += "[$ \(sign)]"
-                    }
-
-                    if red {
-                        format += "[Red]"
-                    }
-                    break
-                case .percentage(let decimalPlaces):
-                    format = "0"
-                    if decimalPlaces > 0 {
-                        format += "."
-                    }
-                    var i = 0
-                    while i < decimalPlaces {
-                        format += "0"
-                        i += 1
-                    }
-                    format += "%"
-                    break
-                case .number(let decimalPlaces):
-                    format = "0"
-                    if decimalPlaces > 0 {
-                        format += "."
-                    }
-                    var i = 0
-                    while i < decimalPlaces {
-                        format += "0"
-                        i += 1
-                    }
-                    break
-                case .accounting(_, let sign):
-                    if sign == "$" {
-                        format = "_-* #,##0.00\\ [$$]_-;\\-* #,##0.00\\ [$$]_-;_-* \"-\"??\\ [$$]_-;_-@"
-                    } else if sign == "€" {
-                        format = "_-* #,##0.00\\ [$€-1]_-;\\-* #,##0.00\\ [$€-1]_-;_-* \"-\"??\\ [$€-1]_-;_-@"
-                    } else {
-                        format = "[_-* #,##0.00\\ [$ \(sign)]_-;\\-* #,##0.00\\ [$ \(sign)]_-;_-* \"-\"??\\ [$ \(sign)]_-;_-@"
-                    }
-                    break
-                case .scientific(let decimalPlaces):
-                    format = "0"
-                    if decimalPlaces > 0 {
-                        format += "."
-                    }
-                    var i = 0
-                    while i < decimalPlaces {
-                        format += "0"
-                        i += 1
-                    }
-                    format += "E+"
-                    i = 0
-                    while i < decimalPlaces {
-                        format += "0"
-                        i += 1
-                    }
-                    break
-                default:
-                    format = "0"
+            switch numberFormat {
+            case .custom(let f):
+                format = f
+                break
+            case .date(let f):
+                format = f
+                break
+            case .time(let f):
+                format = f
+                break
+            case .currency(let decimalPlaces, let sign, let red):
+                if decimalPlaces < 2 {
+                    format = "#,##0\\ "
+                } else {
+                    format = "#,##0.00"
                 }
-                
-                let id = (self.NumberFormats.count + 50)
-                
-                let xml = "<numFmt numFmtId=\"\(id)\" formatCode=\"\(format)\"/>"
-                
-                cell.idNumFormat = id
-                self.NumberFormats[idval] = (xml,id)
+
+                if sign == "$" {
+                    format = "[$$]\(format)"
+                } else if sign == "€" {
+                    format += "[$€-1]"
+                } else {
+                    format += "[$ \(sign)]"
+                }
+
+                if red {
+                    format += "[Red]"
+                }
+                break
+            case .percentage(let decimalPlaces):
+                format = "0"
+                if decimalPlaces > 0 {
+                    format += "."
+                }
+                var i = 0
+                while i < decimalPlaces {
+                    format += "0"
+                    i += 1
+                }
+                format += "%"
+                break
+            case .number(let decimalPlaces):
+                format = "0"
+                if decimalPlaces > 0 {
+                    format += "."
+                }
+                var i = 0
+                while i < decimalPlaces {
+                    format += "0"
+                    i += 1
+                }
+                break
+            case .accounting(_, let sign):
+                if sign == "$" {
+                    format = "_-* #,##0.00\\ [$$]_-;\\-* #,##0.00\\ [$$]_-;_-* \"-\"??\\ [$$]_-;_-@"
+                } else if sign == "€" {
+                    format = "_-* #,##0.00\\ [$€-1]_-;\\-* #,##0.00\\ [$€-1]_-;_-* \"-\"??\\ [$€-1]_-;_-@"
+                } else {
+                    format = "[_-* #,##0.00\\ [$ \(sign)]_-;\\-* #,##0.00\\ [$ \(sign)]_-;_-* \"-\"??\\ [$ \(sign)]_-;_-@"
+                }
+                break
+            case .scientific(let decimalPlaces):
+                format = "0"
+                if decimalPlaces > 0 {
+                    format += "."
+                }
+                var i = 0
+                while i < decimalPlaces {
+                    format += "0"
+                    i += 1
+                }
+                format += "E+"
+                i = 0
+                while i < decimalPlaces {
+                    format += "0"
+                    i += 1
+                }
+                break
+            default:
+                format = "0"
             }
-        } else {
-            cell.idNumFormat = Int(idval)
+            
+            let id = (self.NumberFormats.count + 50)
+            
+            let xml = "<numFmt numFmtId=\"\(id)\" formatCode=\"\(format)\"/>"
+            
+            cell.idNumFormat = id
+            self.NumberFormats[idval] = (xml,id)
         }
     }
     

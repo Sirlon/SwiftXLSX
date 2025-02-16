@@ -24,87 +24,27 @@ public enum XNumberFormat {
     func ind() -> UInt64 {
         switch self {
         case .general:
-            return 0
+            return UInt64("general".hash)
         case .number(let decimalPlaces):
-            if decimalPlaces == 2 {
-                return 2
-            } else if decimalPlaces <= 0 {
-                return 1
-            } else {
-                return 0
-            }
+            return UInt64("number\(decimalPlaces)".hash)
         case .currency(let decimalPlaces, let sign, let red):
-            if decimalPlaces == 2 {
-                if red {
-                    return 40
-                }
-                return 39
-            } else if decimalPlaces <= 1 {
-                if red {
-                    return 38
-                }
-                return 37
-            } else {
-                return 0
-            }
+            return UInt64("currency\(decimalPlaces)\(sign)\(red ? "1" : "0")".hash)
         case .accounting(let decimalPlaces, let sign):
-            return 40
+            return UInt64("accounting\(decimalPlaces)\(sign)".hash)
         case .date(let format):
-            switch format {
-            case "d/m/yyyy":
-                return 14
-            case "d-mmm-yy":
-                return 15
-            case "d-mmm":
-                return 16
-            case "mmm-yy":
-                return 17
-            case "m/d/yyyy H:mm":
-                return 22
-            default:
-                return UInt64.max
-            }
+            return UInt64("date\(format)".hash)
         case .time(let format):
-            switch format {
-            case "h:mm tt":
-                return 18
-            case "h:mm:ss tt":
-                return 19
-            case "h:mm":
-                return 20
-            case "h:mm:ss":
-                return 21
-            case "mm:ss":
-                return 45
-            case "[h]:mm:ss":
-                return 46
-            case "mmss.0":
-                return 47
-            default:
-                return UInt64.max
-            }
+            return UInt64("time\(format)".hash)
         case .percentage(let decimalPlaces):
-            if decimalPlaces == 2 {
-                return 10
-            } else if decimalPlaces <= 0 {
-                return 9
-            } else {
-                return 0
-            }
+            return UInt64("percentage\(decimalPlaces)".hash)
         case .fraction:
-            return 12
+            return UInt64("fraction".hash)
         case .scientific(let decimalPlaces):
-            if decimalPlaces == 1 {
-                return 48
-            } else if decimalPlaces == 2 {
-                return  11
-            } else {
-                return 0
-            }
+            return UInt64("scientific\(decimalPlaces)".hash)
         case .text:
-            return 49
+            return UInt64("text".hash)
         case .custom(let format):
-            return UInt64.max
+            return UInt64("custom\(format)".hash)
         }
     }
 }
