@@ -21,30 +21,30 @@ public enum XNumberFormat {
     case text
     case custom(format: String)
     
-    func ind() -> UInt64 {
+    func ind() -> String {
         switch self {
         case .general:
-            return UInt64("general".hash)
+            return "general"
         case .number(let decimalPlaces):
-            return UInt64("number\(decimalPlaces)".hash)
+            return "number\(decimalPlaces)"
         case .currency(let decimalPlaces, let sign, let red):
-            return UInt64("currency\(decimalPlaces)\(sign)\(red ? "1" : "0")".hash)
+            return "currency\(decimalPlaces)\(sign)\(red ? "1" : "0")"
         case .accounting(let decimalPlaces, let sign):
-            return UInt64("accounting\(decimalPlaces)\(sign)".hash)
+            return "accounting\(decimalPlaces)\(sign)"
         case .date(let format):
-            return UInt64("date\(format)".hash)
+            return "date\(format)"
         case .time(let format):
-            return UInt64("time\(format)".hash)
+            return "time\(format)"
         case .percentage(let decimalPlaces):
-            return UInt64("percentage\(decimalPlaces)".hash)
+            return "percentage\(decimalPlaces)"
         case .fraction:
-            return UInt64("fraction".hash)
+            return "fraction"
         case .scientific(let decimalPlaces):
-            return UInt64("scientific\(decimalPlaces)".hash)
+            return "scientific\(decimalPlaces)"
         case .text:
-            return UInt64("text".hash)
+            return "text"
         case .custom(let format):
-            return UInt64("custom\(format)".hash)
+            return "custom\(format)"
         }
     }
 }

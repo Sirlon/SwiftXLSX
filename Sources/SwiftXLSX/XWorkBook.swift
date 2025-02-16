@@ -37,7 +37,7 @@ final public class XWorkBook{
     private var xfs:[UInt64:(String,Int)] = [:]
     private var Borders:[String] = []
     private var Drawings:[String] = []
-    private var NumberFormats:[UInt64:(String,Int)] = [:]
+    private var NumberFormats:[String:(String,Int)] = [:]
     
     private var vals:[String] = []
     private var valss:Set<String> = Set([])
@@ -113,11 +113,11 @@ final public class XWorkBook{
     private func findNumberFormats(_ cell:XCell){
         let numberFormat = cell.numFormat
         
-        let idval:UInt64 = numberFormat.ind()
+        let idval:String = numberFormat.ind()
         
         if let (_,ind) = self.NumberFormats[idval] {
             cell.idNumFormat = ind
-        }else{
+        } else {
             var format = ""
             
             switch numberFormat {
