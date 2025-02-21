@@ -87,6 +87,11 @@ public class XImage{
 public struct XImageCell{
     let key:String
     let size:CGSize
+    
+    public init(key: String, size: CGSize) {
+        self.key = key
+        self.size = size
+    }
 }
 
 extension XImageCell:Equatable{
