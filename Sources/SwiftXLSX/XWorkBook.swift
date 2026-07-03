@@ -236,6 +236,11 @@ final public class XWorkBook{
         idval += cell.Border ? 100 : 0
         idval += UInt64(cell.idFill) * 1000
         idval += UInt64(cell.idFont) * 1000000
+        // The number format MUST be part of the dedup key: without it, the
+        // first cell of a given font/alignment/fill/border combination locks
+        // its numFmt in for every later cell sharing that combination (e.g.
+        // time cells rendered with a date format).
+        idval += UInt64(cell.idNumFormat) * 1000000000
         
         for merge in sheet.merge {
             if merge.inrect(cell.coords!){
