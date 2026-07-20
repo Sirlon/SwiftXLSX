@@ -487,6 +487,8 @@ final public class XWorkBook{
                                 colls.append("<c r=\"\(XSheet.EncodeNumberABC(col-1))\(row)\" s=\"\(cell.idStyle >= 0 ? cell.idStyle : 0)\" />")
                             case .formula(let formula, let preVal):
                                 colls.append("<c r=\"\(XSheet.EncodeNumberABC(col-1))\(row)\" s=\"\(cell.idStyle)\" ><f>\(formula)</f><v>\(preVal)</v></c>")
+                            case .formulaStr(let formula, let preVal):
+                                colls.append("<c r=\"\(XSheet.EncodeNumberABC(col-1))\(row)\" s=\"\(cell.idStyle)\" t=\"str\"><f>\(formula)</f><v>\(preVal.XmlPrep())</v></c>")
                             }
                         }else{
                             colls.append("<c r=\"\(XSheet.EncodeNumberABC(col-1))\(row)\" s=\"\(cell.idStyle >= 0 ? cell.idStyle : 0)\" />")

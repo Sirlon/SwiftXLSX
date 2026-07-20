@@ -103,6 +103,11 @@ public enum XValue : Equatable {
     case float(Float)
     case icon(XImageCell)
     case formula(String, String)
+    /// Formula with a string-typed cached value (`t="str"`). Viewers that do
+    /// not recalculate formulas (e.g. Quick Look) display the cached string
+    /// verbatim, while spreadsheet apps recalculate the formula and apply the
+    /// cell's number format to the numeric result.
+    case formulaStr(String, String)
 }
 
 
